@@ -4,9 +4,9 @@ import {useIsDrawerOpen, DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-type RootStackParamList = {};
+type RootDrawerParamList = {};
 
-type MenuNavigationProp = DrawerNavigationProp<RootStackParamList>;
+type MenuNavigationProp = DrawerNavigationProp<RootDrawerParamList>;
 
 const Menu: React.FC = () => {
   const navigation = useNavigation<MenuNavigationProp>();

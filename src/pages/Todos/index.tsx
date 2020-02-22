@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import {FlatList, Switch} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Button from '../../components/Button';
 
 import {
   Container,
@@ -13,6 +16,12 @@ import {
   ButtonWrapper,
   AddButton,
 } from './styles';
+
+type RootStackParamList = {
+  Todo: {};
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Todo'>;
 
 interface Todo {
   id: string;
@@ -91,7 +100,12 @@ const data: Todo[] = [
 ];
 
 const Todos: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
   const [value, setValue] = useState(false);
+
+  function HandleAddTodo() {
+    navigation.navigate('Todo');
+  }
 
   return (
     <Container>
@@ -119,11 +133,13 @@ const Todos: React.FC = () => {
           </ItemContainer>
         )}
       />
-      <ButtonWrapper>
-        <AddButton>
-          <Icon name="add" size={35} color="#fff" />
-        </AddButton>
-      </ButtonWrapper>
+
+      <Button
+        onPress={() => HandleAddTodo()}
+        iconName="add"
+        iconSize={35}
+        iconColor="#fff"
+      />
     </Container>
   );
 };

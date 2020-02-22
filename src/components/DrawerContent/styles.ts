@@ -2,10 +2,11 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
+  overflow: hidden;
 `;
 
 export const Header = styled.View`
-  height: 190px;
+  height: 33%;
   background-color: #ddd;
   align-items: center;
 `;
@@ -17,11 +18,13 @@ export const Triangle = styled.View.attrs({
   borderStyle: 'solid',
   borderLeftWidth: 140,
   borderRightWidth: 140,
-  borderBottomWidth: 190,
+  // borderBottomWidth: 190,
   borderLeftColor: 'transparent',
   borderRightColor: 'transparent',
   position: 'absolute',
-})``;
+})`
+  border-bottom-width: 100px;
+`;
 
 export const Trapezoid = styled.View.attrs({
   width: 200,

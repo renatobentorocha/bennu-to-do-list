@@ -49,7 +49,8 @@ const DrawerContent: React.FC = () => {
             right: 0,
             top: 0,
             borderRightWidth: 0,
-            borderBottomWidth: 140,
+            borderLeftWidth: 100,
+            // borderBottomWidth: 100,
           }}
         />
         <InputContainer>

@@ -18,7 +18,6 @@ export const ButtonWrapper = styled.View.attrs({
   height: 80px;
   width: 80px;
   border-radius: 40px;
-  z-index: 1000;
 `;
 
 export const AddButton = styled.TouchableOpacity.attrs({})`
