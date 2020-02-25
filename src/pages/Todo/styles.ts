@@ -87,3 +87,12 @@ export const Triangle = styled.View.attrs({
   borderBottomColor: '#bbb',
   rotation: 180,
 })``;
+
+export const Indicator = styled.ActivityIndicator.attrs({
+  size: 60,
+  color: '#039BE5',
+})`
+  position: absolute;
+  top: 20%;
+  left: 50%;
+`;

@@ -1,138 +1,99 @@
-import React, {useState} from 'react';
-import {FlatList, Switch} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useState, useEffect} from 'react';
+import {FlatList, Switch, ActivityIndicator} from 'react-native';
+
+import {useDispatch, useSelector} from 'react-redux';
+
+import format from 'date-fns/format';
+import pt from 'date-fns/locale/pt-BR';
+
 import {useNavigation} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import {StackNavigationProp} from '@react-navigation/stack';
+
+import {RootState} from '../../store/rootReducer';
+import {fetchTasks, editTask, ITask} from '../../store/features/taskList/slice';
+
 import Button from '../../components/Button';
 
 import {
   Container,
   ItemContainer,
-  Todo as Task,
+  Task,
   Title,
   Description,
   Appointment,
-  ButtonWrapper,
-  AddButton,
 } from './styles';
 
 type RootStackParamList = {
-  Todo: {};
+  Todo: {
+    id?: string;
+  };
 };
 
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Todo'>;
 
-interface Todo {
-  id: string;
-  title: string;
-  description: string;
-  date: Date;
-  completed: boolean;
-  created_at: Date;
-}
-
-const data: Todo[] = [
-  {
-    id: '1',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '2',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '3',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '4',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '5',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '6',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '7',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-  {
-    id: '8',
-    title: 'Reunião de projeto',
-    description: 'Reunião de planejamento de projeto',
-    date: new Date(),
-    completed: false,
-    created_at: new Date(),
-  },
-];
-
 const Todos: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const {data, loading} = useSelector((state: RootState) => ({
+    data: state.tasks.data,
+    loading: state.tasks.loading,
+  }));
+
   const navigation = useNavigation<NavigationProp>();
-  const [value, setValue] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function HandleEditTodo(id: string) {
+    navigation.navigate('Todo', {id});
+  }
 
   function HandleAddTodo() {
     navigation.navigate('Todo');
   }
 
+  const handleDateFormat = (date: Date) => {
+    return format(new Date(date), 'EEEE, LLL, dd yyyy', {locale: pt});
+  };
+
+  const handleEditTask = (task: ITask) => {
+    dispatch(editTask({...task, completed: !task.completed}));
+  };
+
   return (
     <Container>
-      <FlatList<Todo>
-        data={data}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <ItemContainer>
-            {/* <Switch
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList<ITask>
+          data={data}
+          keyExtractor={item => `${item._id}`}
+          renderItem={({item}) => (
+            <ItemContainer>
+              {/* <Switch
               thumbColor="#fff"
               trackColor={{true: '#B583CA', false: ''}}
               value={value}
               onValueChange={() => setValue(!value)}
             /> */}
-            <CheckBox
-              tintColors={{true: '#B583CA'}}
-              value={value}
-              onValueChange={() => setValue(!value)}
-            />
-            <Task>
-              <Title>{item.title}</Title>
-              <Description>{item.description}</Description>
-              <Appointment>{item.date.toString()}</Appointment>
-            </Task>
-          </ItemContainer>
-        )}
-      />
+              <CheckBox
+                tintColors={{true: '#B583CA'}}
+                value={item.completed}
+                onValueChange={() => handleEditTask(item)}
+              />
+              <Task onPress={() => HandleEditTodo(`${item._id}`)}>
+                <Title>{item.title}</Title>
+                <Description>{item.description}</Description>
+                <Appointment>{handleDateFormat(item.date)}</Appointment>
+              </Task>
+            </ItemContainer>
+          )}
+        />
+      )}
 
       <Button
         onPress={() => HandleAddTodo()}

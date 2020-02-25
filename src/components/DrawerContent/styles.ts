@@ -60,12 +60,6 @@ export const InputContainer = styled.View`
   padding: 0 20px;
 `;
 
-export const Input = styled.TextInput`
-  width: 85%;
-  background-color: #fff;
-  z-index: 2;
-`;
-
 export const Menu = styled.View`
   flex: 1;
   background-color: #fff;
@@ -81,4 +75,11 @@ export const Item = styled.Text`
   color: #434343;
   padding: 20px;
   font-weight: bold;
+`;
+
+export const Picker = styled.Picker`
+  width: 100%;
+  height: 44px;
+  background-color: #fff;
+  margin-right: 30px;
 `;
