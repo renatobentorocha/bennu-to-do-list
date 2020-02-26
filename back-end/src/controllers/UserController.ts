@@ -9,6 +9,12 @@ class UserController {
   }
 
   public async store (req: Request, res: Response): Promise<Response> {
+    const { email } = req.body;
+
+    if (await User.findOne({ email })) {
+      return res.status(400).json({ error: "User already exits" });
+    }
+
     const user = await User.create(req.body)
 
     return res.status(201).json(user)
