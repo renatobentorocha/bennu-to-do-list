@@ -75,17 +75,21 @@ const Todo: React.FC = () => {
 
   useEffect(() => {
     async function loadTask() {
-      if (editing()) {
-        setLoading(true);
-        const {id} = route.params;
+      try {
+        if (editing()) {
+          setLoading(true);
+          const {id} = route.params;
 
-        const {data} = await api.get<ITask>(`/tasks/${id}`);
+          const {data} = await api.get<ITask>(`/tasks/${id}`);
 
-        setTask(data);
+          setTask(data);
 
-        setSelectedDate(new Date(data.date));
-        setSelectedTime(new Date(data.date));
-        setLoading(false);
+          setSelectedDate(new Date(data.date));
+          setSelectedTime(new Date(data.date));
+          setLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
 
