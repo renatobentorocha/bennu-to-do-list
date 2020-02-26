@@ -95,7 +95,7 @@ const Todo: React.FC = () => {
 
     loadTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [route.params]);
 
   async function handleAddTask() {
     try {

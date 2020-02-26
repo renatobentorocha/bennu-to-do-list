@@ -77,9 +77,27 @@ export const Item = styled.Text`
   font-weight: bold;
 `;
 
-export const Picker = styled.Picker`
+export const SelectedTask = styled.Text`
+  color: #434343;
+  width: 80%;
+  height: 30px;
+  background-color: #fff;
+`;
+
+export const TasksWrapper = styled.View`
+  position: absolute;
+  top: -10px;
+  height: 70%;
+  z-index: 999;
+  padding: 20px;
   width: 100%;
-  height: 44px;
-  background-color: rgba(255, 255, 255, 0.8);
-  margin-right: 30px;
+
+  background-color: #fff;
+`;
+
+export const Task = styled.Text`
+  width: 100%;
+  margin: 15px 0;
+  padding: 15px 0;
+  background-color: #f5f5f5;
 `;
