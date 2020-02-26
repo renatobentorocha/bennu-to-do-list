@@ -1,11 +1,21 @@
 import React from 'react';
 import {TouchableOpacity, Image, Alert, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {deleteTask} from '../../store/features/taskList/slice';
+import {RootState} from '../../store/rootReducer';
+
+import Loading from '../Loading';
 
 interface Props {
   taskId: string;
 }
 
 const Delete: React.FC<Props> = ({taskId}) => {
+  const dispatch = useDispatch();
+
+  const deleting = useSelector((state: RootState) => state.tasks.deleting);
+
   function handleDelete() {
     Alert.alert(
       'Exclusão de tarefa',
@@ -13,12 +23,12 @@ const Delete: React.FC<Props> = ({taskId}) => {
       [
         {
           text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => {},
           style: 'cancel',
         },
         {
           text: 'Confirmar',
-          onPress: () => console.log('OK Pressed'),
+          onPress: () => dispatch(deleteTask(taskId)),
         },
       ],
       {cancelable: false},
@@ -27,7 +37,14 @@ const Delete: React.FC<Props> = ({taskId}) => {
 
   return (
     <TouchableOpacity style={styles.button} onPress={() => handleDelete()}>
-      <Image style={styles.image} source={require('../../assets/delete.png')} />
+      {deleting ? (
+        <Loading size="small" color="#fff" />
+      ) : (
+        <Image
+          style={styles.image}
+          source={require('../../assets/delete.png')}
+        />
+      )}
     </TouchableOpacity>
   );
 };

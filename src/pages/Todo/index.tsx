@@ -1,23 +1,28 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {Alert} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {Alert, StyleSheet, Text} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
-import {useRoute, useNavigation} from '@react-navigation/native';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {useRoute} from '@react-navigation/native';
 
 import * as Yup from 'yup';
 
 import format from 'date-fns/format';
 import pt from 'date-fns/locale/pt-BR';
 
+import CheckBox from '../../components/CheckBox';
+
+import {TodoRouteProp} from '../../routes';
+
 import api from '../../services/api';
+import {RootState} from '../../store/rootReducer';
 import {addTask, editTask, ITask} from '../../store/features/taskList/slice';
 
 import DatePicker, {Mode} from '../../components/DatePicker';
 import Confirm from '../../components/Button';
 
 import TimeZone from '../../util/timeZone';
+
+import Images from '../../assets/Images';
 
 import {
   Container,
@@ -29,20 +34,11 @@ import {
   DateInput,
   HourWrapper,
   Hour,
+  CompletedWrapper,
   Button,
   Triangle,
   Indicator,
 } from './styles';
-
-type RootStackParamList = {
-  Todo: {
-    id?: string;
-  };
-  Todos: {};
-};
-
-type TodoRouteProp = RouteProp<RootStackParamList, 'Todo'>;
-type TodoNavigationProp = StackNavigationProp<RootStackParamList, 'Todos'>;
 
 const schema = Yup.object().shape({
   title: Yup.string()
@@ -54,12 +50,17 @@ const schema = Yup.object().shape({
 
 const Todo: React.FC = () => {
   const route = useRoute<TodoRouteProp>();
-  const navigation = useNavigation<TodoNavigationProp>();
 
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const editingTask = useSelector((state: RootState) => state.tasks.editing);
+
+  const [task, setTask] = useState<ITask>({
+    title: '',
+    description: '',
+    completed: false,
+    date: new Date(),
+  });
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -80,8 +81,8 @@ const Todo: React.FC = () => {
 
         const {data} = await api.get<ITask>(`/tasks/${id}`);
 
-        setTitle(data.title);
-        setDescription(data.description);
+        setTask(data);
+
         setSelectedDate(new Date(data.date));
         setSelectedTime(new Date(data.date));
         setLoading(false);
@@ -97,23 +98,20 @@ const Todo: React.FC = () => {
       const date = format(selectedDate, 'yyyy-MM-dd');
       const time = format(selectedTime, 'HH:mm:ss');
 
-      const task: ITask = {
-        title,
-        description,
+      const newTask: ITask = {
+        ...task,
         date: new Date(`${date}T${time}${TimeZone.getTimeZone()}`),
       };
 
-      await schema.validate(task);
+      await schema.validate(newTask);
 
       if (editing()) {
         const {id} = route.params;
 
-        dispatch(editTask({_id: id, ...task}));
+        dispatch(editTask({_id: id, ...newTask}));
       } else {
-        dispatch(addTask(task));
+        dispatch(addTask(newTask));
       }
-
-      navigation.navigate('Todos');
     } catch (error) {
       Alert.alert(error.message);
     }
@@ -147,14 +145,31 @@ const Todo: React.FC = () => {
     setShow(!show);
   };
 
+  const handleCompletedTask = (pTask: ITask) => {
+    setTask({...task, completed: !pTask.completed});
+  };
+
   return (
     <Container>
-      <Label>Title</Label>
-      <Title value={title} onChangeText={text => setTitle(text)} />
+      <Label>Titulo</Label>
+      <Title
+        value={task.title}
+        onChangeText={text =>
+          setTask({
+            ...task,
+            title: text,
+          })
+        }
+      />
       <Label>Descrição</Label>
       <Description
-        value={description}
-        onChangeText={text => setDescription(text)}
+        value={task.description}
+        onChangeText={text =>
+          setTask({
+            ...task,
+            description: text,
+          })
+        }
       />
       <Label>Data e hora conclusão</Label>
       <Appointment>
@@ -171,6 +186,15 @@ const Todo: React.FC = () => {
           </Button>
         </HourWrapper>
       </Appointment>
+      <CompletedWrapper>
+        <CheckBox
+          value={task.completed}
+          onValueChange={handleCompletedTask}
+          task={task}
+          checkedColor="#ff7043"
+        />
+        <Text>Completada?</Text>
+      </CompletedWrapper>
       {show && (
         <DatePicker
           value={mode === 'date' ? selectedDate : selectedTime}
@@ -182,13 +206,20 @@ const Todo: React.FC = () => {
       )}
       <Confirm
         onPress={() => handleAddTask()}
-        iconName="add"
-        iconSize={35}
-        iconColor="#fff"
+        imageUrl={Images.Todo.check}
+        style={styles.image}
+        loading={editingTask}
       />
       {loading && <Indicator />}
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 23,
+    height: 23,
+  },
+});
 
 export default Todo;

@@ -14,14 +14,14 @@ export const ButtonWrapper = styled.View.attrs({
   position: absolute;
   bottom: 10px;
   right: 0;
-  background-color: #ff6666;
+  background-color: #ff7043;
   height: 80px;
   width: 80px;
   border-radius: 40px;
 `;
 
 export const AddButton = styled.TouchableOpacity.attrs({})`
-  background-color: #ff6666;
+  background-color: #ff7043;
   color: #fff;
   height: 80px;
   width: 80px;

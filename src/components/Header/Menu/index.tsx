@@ -1,8 +1,7 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Image} from 'react-native';
 import {useIsDrawerOpen, DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type RootDrawerParamList = {};
 
@@ -21,8 +20,14 @@ const Menu: React.FC = () => {
   }
 
   return (
-    <TouchableOpacity onPress={handleOnPress} style={{marginLeft: 20}}>
-      <Icon name="menu" size={30} color="#fff" />
+    <TouchableOpacity
+      onPress={handleOnPress}
+      style={{marginLeft: 20, padding: 5}}>
+      <Image
+        source={require('../../../assets/hamburguer.png')}
+        style={{width: 25, height: 25}}
+      />
+      {/* <Icon name="menu" size={30} color="#fff" /> */}
     </TouchableOpacity>
   );
 };

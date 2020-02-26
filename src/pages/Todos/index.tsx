@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {FlatList, Switch, ActivityIndicator} from 'react-native';
+import React, {useEffect} from 'react';
+import {FlatList, ActivityIndicator, StyleSheet} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -7,14 +7,15 @@ import format from 'date-fns/format';
 import pt from 'date-fns/locale/pt-BR';
 
 import {useNavigation} from '@react-navigation/native';
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from '../../components/CheckBox';
 
-import {StackNavigationProp} from '@react-navigation/stack';
+import {TodosStackNavigationProp} from '../../routes';
 
 import {RootState} from '../../store/rootReducer';
 import {fetchTasks, editTask, ITask} from '../../store/features/taskList/slice';
 
 import Button from '../../components/Button';
+import Images from '../../assets/Images';
 
 import {
   Container,
@@ -25,14 +26,6 @@ import {
   Appointment,
 } from './styles';
 
-type RootStackParamList = {
-  Todo: {
-    id?: string;
-  };
-};
-
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Todo'>;
-
 const Todos: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -41,7 +34,7 @@ const Todos: React.FC = () => {
     loading: state.tasks.loading,
   }));
 
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<TodosStackNavigationProp>();
 
   useEffect(() => {
     dispatch(fetchTasks());
@@ -74,16 +67,10 @@ const Todos: React.FC = () => {
           keyExtractor={item => `${item._id}`}
           renderItem={({item}) => (
             <ItemContainer>
-              {/* <Switch
-              thumbColor="#fff"
-              trackColor={{true: '#B583CA', false: ''}}
-              value={value}
-              onValueChange={() => setValue(!value)}
-            /> */}
               <CheckBox
-                tintColors={{true: '#B583CA'}}
                 value={item.completed}
-                onValueChange={() => handleEditTask(item)}
+                onValueChange={handleEditTask}
+                task={item}
               />
               <Task onPress={() => HandleEditTodo(`${item._id}`)}>
                 <Title>{item.title}</Title>
@@ -97,12 +84,18 @@ const Todos: React.FC = () => {
 
       <Button
         onPress={() => HandleAddTodo()}
-        iconName="add"
-        iconSize={35}
-        iconColor="#fff"
+        imageUrl={Images.Todos.plus}
+        style={styles.image}
       />
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 25,
+    height: 25,
+  },
+});
 
 export default Todos;

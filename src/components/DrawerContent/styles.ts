@@ -80,6 +80,6 @@ export const Item = styled.Text`
 export const Picker = styled.Picker`
   width: 100%;
   height: 44px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   margin-right: 30px;
 `;

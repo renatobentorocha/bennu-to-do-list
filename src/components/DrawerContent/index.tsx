@@ -71,6 +71,7 @@ const DrawerContent: React.FC<Props> = ({navigation}) => {
         />
         <InputContainer>
           <Picker
+            mode="dropdown"
             selectedValue={task}
             onValueChange={(itemValue, _) => HandleEditTodo(itemValue)}>
             {data.map(v => (
@@ -89,8 +90,6 @@ const DrawerContent: React.FC<Props> = ({navigation}) => {
               right: 60,
             }}
           />
-          {/* <Input />
-           */}
         </InputContainer>
       </Header>
       <Menu>

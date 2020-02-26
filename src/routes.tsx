@@ -1,6 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, Image} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import DrawerContent from './components/DrawerContent';
@@ -8,6 +11,24 @@ import Todos from './pages/Todos';
 import Todo from './pages/Todo';
 import Menu from './components/Header/Menu';
 import Delete from './components/Delete';
+
+type RootStackParamList = {
+  Todo: {
+    id?: string;
+  };
+  Todos: {};
+};
+
+export type TodosStackNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Todo'
+>;
+
+export type TodoRouteProp = RouteProp<RootStackParamList, 'Todo'>;
+export type TodoStackNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Todos'
+>;
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,7 +55,8 @@ const StackRoutes = () => (
             : 'Adicionar uma nova tarefa',
           headerStyle: {backgroundColor: '#039BE5'},
           headerTintColor: '#fff',
-          headerRight: () => route.params && <Delete />,
+          headerRight: () =>
+            route.params && <Delete taskId={route.params.id} />,
         };
       }}
     />

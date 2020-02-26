@@ -48,6 +48,7 @@ export const DateInput = styled(Input).attrs({
 })`
   width: 100%;
   padding-right: 30px;
+  text-transform: capitalize;
 `;
 
 export const HourWrapper = styled.View`
@@ -95,4 +96,9 @@ export const Indicator = styled.ActivityIndicator.attrs({
   position: absolute;
   top: 20%;
   left: 50%;
+`;
+
+export const CompletedWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
