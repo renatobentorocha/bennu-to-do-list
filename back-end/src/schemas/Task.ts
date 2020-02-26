@@ -5,6 +5,7 @@ interface TaskInterface extends Document {
   description: string,
   date: Date,
   completed: boolean,
+  user: Schema.Types.ObjectId
 }
 
 const TaskSchema = new Schema({
@@ -14,6 +15,10 @@ const TaskSchema = new Schema({
   completed: {
     type: Boolean,
     default: false
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
   }
 }, {
   timestamps: true

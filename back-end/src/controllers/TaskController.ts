@@ -1,10 +1,17 @@
 import { Request, Response } from 'express'
+import { ParamsDictionary } from "express-serve-static-core";
 import Task from '../schemas/Task'
+
+interface RequestType extends Request<ParamsDictionary>  {  
+  userId: string;
+}
 
 class TaskController {
   public async index (req: Request, res: Response): Promise<Response> {
+    const request = req as RequestType;
+
     try {
-      const tasks = await Task.find()
+      const tasks = await Task.find({user: request.userId})
 
       return res.status(200).json(tasks)
     } catch (error) {
@@ -24,8 +31,10 @@ class TaskController {
   }
 
   public async store (req: Request, res: Response): Promise<Response> {
+    const request = req as RequestType;
+
     try {
-      const task = await Task.create(req.body)
+      const task = await Task.create({...req.body, user: request.userId})
 
       return res.status(201).json(task)
     } catch (error) {
