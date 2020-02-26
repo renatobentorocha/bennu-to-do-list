@@ -74,7 +74,7 @@ const Routes = () => {
     (state: RootState) => state.auth.data.token,
   );
 
-  return authenticated ? (
+  return !authenticated ? (
     <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
         name="SignIn"

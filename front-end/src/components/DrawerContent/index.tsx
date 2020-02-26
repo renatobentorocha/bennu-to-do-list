@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {TouchableOpacity, FlatList} from 'react-native';
 
@@ -8,6 +8,9 @@ import {
   DrawerContentComponentProps,
   DrawerContentOptions,
 } from '@react-navigation/drawer';
+
+import {ITask} from '../../store/features/taskList/slice';
+import {signOut} from '../../store/features/auth/slice';
 
 import {RootState} from '../../store/rootReducer';
 import {
@@ -25,11 +28,11 @@ import {
   Task,
 } from './styles';
 
-import {ITask} from '../../store/features/taskList/slice';
-
 type Props = DrawerContentComponentProps<DrawerContentOptions>;
 
 const DrawerContent: React.FC<Props> = ({navigation}) => {
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState('');
   const [showTasks, setShowTasks] = useState(false);
 
@@ -71,7 +74,9 @@ const DrawerContent: React.FC<Props> = ({navigation}) => {
         )}
         <Title>To Do</Title>
         <Item>Configurações</Item>
-        <Item>Sair</Item>
+        <TouchableOpacity onPress={() => dispatch(signOut())}>
+          <Item>Sair</Item>
+        </TouchableOpacity>
       </Menu>
     </Container>
   );
