@@ -65,7 +65,9 @@ const DrawerContent: React.FC<Props> = ({navigation}) => {
               data={data}
               keyExtractor={item => `${item._id}`}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => HandleEditTodo(item)}>
+                <TouchableOpacity
+                  onPress={() => HandleEditTodo(item)}
+                  hitSlop={{top: 15, right: 15, bottom: 15, left: 15}}>
                   <Task>{item.title}</Task>
                 </TouchableOpacity>
               )}
@@ -74,7 +76,9 @@ const DrawerContent: React.FC<Props> = ({navigation}) => {
         )}
         <Title>To Do</Title>
         <Item>Configurações</Item>
-        <TouchableOpacity onPress={() => dispatch(signOut())}>
+        <TouchableOpacity
+          onPress={() => dispatch(signOut())}
+          hitSlop={{top: 15, right: 15, bottom: 15, left: 15}}>
           <Item>Sair</Item>
         </TouchableOpacity>
       </Menu>

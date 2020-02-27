@@ -60,7 +60,8 @@ const StackRoutes = () => (
             ? 'Edição da tarefa'
             : 'Adicionar uma nova tarefa',
           headerStyle: {backgroundColor: '#039BE5'},
-          headerTintColor: '#fff',
+          headerTintColor: '#014d72',
+          headerTitleStyle: {color: '#fff'},
           headerRight: () =>
             route.params && <Delete taskId={route.params.id} />,
         };
