@@ -9,13 +9,13 @@ export interface ITask {
   _id?: string;
   title: string;
   description: string;
-  date: Date;
+  date: Date | string;
   createdAt?: Date;
   updatedAt?: Date;
   __v?: number;
 }
 
-interface TaskListState {
+export interface TaskListState {
   data: ITask[];
   loading: boolean;
   editing: boolean;
@@ -23,7 +23,7 @@ interface TaskListState {
   error: string | null;
 }
 
-const initialState: TaskListState = {
+export const initialState: TaskListState = {
   data: [],
   loading: false,
   editing: false,
