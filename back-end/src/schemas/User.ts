@@ -34,11 +34,8 @@ UserSchema.pre<UserInterface>("save", async function(next) {
   this.password = await bcrypt.hash(this.password, 8);
 });
 
-UserSchema.methods.compareHash = async function (password: string) {
-  const resp = await bcrypt.compare(password, this.password);  
-
-  return resp;
+UserSchema.methods.compareHash = function (password: string) {  
+  return bcrypt.compareSync(password, this.password);  
 }
-
 
 export default model<UserInterface>('User', UserSchema)
