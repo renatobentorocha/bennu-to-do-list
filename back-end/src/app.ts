@@ -19,9 +19,11 @@ class App {
     this.express.use(cors())
   }
 
-  private database (): void {    
+  private database (): void {  
+    const url = process.env.MONGO_DB_URL as string;
+
     try {
-      mongoose.connect(process.env.MONGO_DB_URL, {
+      mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       })
