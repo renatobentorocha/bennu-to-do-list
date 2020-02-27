@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -18,9 +19,9 @@ class App {
     this.express.use(cors())
   }
 
-  private database (): void {
+  private database (): void {    
     try {
-      mongoose.connect('mongodb+srv://bennu:454545@cluster0-rt7cd.mongodb.net/bennu?retryWrites=true&w=majority', {
+      mongoose.connect(process.env.MONGO_DB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true
       })
