@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
+import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import * as Yup from 'yup';
 
 import {RootState} from '../../store/rootReducer';
 import {signUp} from '../../store/features/auth/slice';
@@ -22,6 +24,14 @@ import {
   HasLoginText,
 } from './styles';
 
+const schema = Yup.object().shape({
+  name: Yup.string().required('Informar o nome'),
+  email: Yup.string()
+    .email()
+    .required('Informar o e-mail'),
+  password: Yup.string().required('Informar a senha secreta'),
+});
+
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -29,8 +39,14 @@ const SignUp: React.FC = () => {
 
   const [user, setUser] = useState<IUser>({name: '', email: ''});
 
-  const handleSubmit = () => {
-    dispatch(signUp(user));
+  const handleSubmit = async () => {
+    try {
+      await schema.validate(user);
+
+      dispatch(signUp(user));
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
 
   return (

@@ -4,6 +4,7 @@ import {AppDispatch} from '../../index';
 import api from '../../../services/api';
 import {AppThunk} from '../../index';
 import * as Navigation from '../../../services/Navigation';
+import {Alert} from 'react-native';
 
 export interface IUser {
   id?: string;
@@ -83,6 +84,7 @@ export const signIn = (
 
     dispatch(signInSuccess(data));
   } catch (err) {
+    Alert.alert('Usúario ou senha inválido');
     dispatch(fail(err.toString()));
   }
 };
