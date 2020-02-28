@@ -95,7 +95,7 @@ export const signUp = (user: IUser): AppThunk => async dispatch => {
 
     await api.post<IUser>('/users', user);
 
-    Navigation.navigate('SingIn');
+    Navigation.navigate('SignIn');
   } catch (err) {
     dispatch(fail(err.toString()));
   }
