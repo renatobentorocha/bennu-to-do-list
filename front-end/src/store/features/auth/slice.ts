@@ -45,6 +45,9 @@ const counterSlice = createSlice({
       state.loading = false;
       state.data = action.payload;
     },
+    signUpSuccess: (state: AuthState) => {
+      state.loading = false;
+    },
     signOutSuccess: (state: AuthState) => {
       state.data = {};
     },
@@ -55,6 +58,7 @@ export const {
   authStart,
   signInSuccess,
   signOutSuccess,
+  signUpSuccess,
   fail,
 } = counterSlice.actions;
 
@@ -94,6 +98,8 @@ export const signUp = (user: IUser): AppThunk => async dispatch => {
     dispatch(authStart());
 
     await api.post<IUser>('/users', user);
+
+    dispatch(signUpSuccess());
 
     Navigation.navigate('SignIn');
   } catch (err) {
